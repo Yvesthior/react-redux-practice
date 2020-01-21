@@ -26,26 +26,74 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/styles.css">
     <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js" ></script>
+    <style>
+      body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+    </style>
   </head>
   <body>
-    <div id="app">
-      <div class="home">
-        <div class="Aligner">
-          <div class="Aligner-item"><img src="/img/logo.png" alt="codingphase logo">
-            <h1>Dev-Starter-Kit</h1>
-            <div class="menu">
-              <ul>
-                <li><a href="http://starterkit.codingphase.com" target="new">Documentation</a></li>
-                <li><a href="http://www.codingphase.com" target="new">CodingPhase.Com</a></li>
-              </ul>
-            </div>
-            <div class="version-num">version 4.0.0</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="/js/dist/vendors~FirstComp.js"></script>
+    <button id="button">Change Background</button>
+    <!-- <script src="/js/dist/vendors~FirstComp.js"></script>
     <script src="/js/dist/FirstComp.js"></script>
-    <script src="/js/dist/main.js"></script>
+    <script src="/js/dist/main.js"></script> -->
+    <script>
+      const { createStore, combineReducers}= Redux
+      // console.log(Redux)
+      // Action creators
+     const CLICKED_BUTTON= (color)=> {
+       //Action
+       return {
+         type:'CLICKED_BUTTON',
+         payload: color
+       }
+     }
+
+     //Reducers
+     const initialState = {
+       color: 'blue'
+     }
+     const viewReducer = (state= initialState, action)=>{
+        switch (action.type) {
+          case 'CLICKED_BUTTON':
+            let newState = Object.assign({}, state, {
+              color: action.payload,
+            })
+            
+            return newState
+            break;
+        
+          default:
+            return state
+            break;
+        }
+     }
+
+     const allReducers = combineReducers({viewReducer})
+     const store = createStore(allReducers)
+    //  console.log(`======================= Initial state`)
+    //  console.log(store.getState())
+    //  console.log(`======================= Updated State with action CLICKED_BUTTON`)
+    //  store.dispatch(CLICKED_BUTTON('green'))
+    //  console.log(store.getState())
+    const button = document.getElementById('button')
+    button.addEventListener('click', ()=>{
+      store.dispatch(CLICKED_BUTTON('red'))
+      // render()
+    })
+    const render= ()=>{
+      const appstate = store.getState().viewReducer
+      console.log(`======================= Initial state`)
+     console.log(appstate)
+     document.body.style.backgroundColor = appstate.color
+    }
+
+    render()
+    store.subscribe(render)
+    </script>
   </body>
 </html>
